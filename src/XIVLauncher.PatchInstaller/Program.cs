@@ -7,14 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
 using Serilog;
-using SharedMemory;
 using XIVLauncher.Common;
-using XIVLauncher.Common.PatcherIpc;
-using XIVLauncher.Common.Patching.IndexedZiPatch;
-using XIVLauncher.Common.Patching.ZiPatch;
-using XIVLauncher.Common.Patching.ZiPatch.Util;
 using XIVLauncher.PatchInstaller.Commands;
 
 namespace XIVLauncher.PatchInstaller
@@ -58,7 +52,7 @@ namespace XIVLauncher.PatchInstaller
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Patcher init failed.\n\n" + ex, "XIVLauncher", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine("Patcher init failed.\n\n" + ex);
                 return -1;
             }
 

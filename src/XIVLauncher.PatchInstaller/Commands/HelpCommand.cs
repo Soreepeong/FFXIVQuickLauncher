@@ -32,7 +32,7 @@ namespace XIVLauncher.PatchInstaller.Commands
         public void Run()
         {
             if (_invokedAsExplicitHelp)
-                MessageBox.Show("Usage:\n" + GetAllHelpMessages(), "XIVLauncher", MessageBoxButton.OK, MessageBoxImage.Information);
+                Console.Write("Usage:\n" + GetAllHelpMessages(), "XIVLauncher", MessageBoxButton.OK, MessageBoxImage.Information);
             else
                 throw new InvalidCommandLineArgsException(GetAllHelpMessages());
         }
@@ -48,7 +48,7 @@ namespace XIVLauncher.PatchInstaller.Commands
                 if (t.GetProperty("HelpMessage") == null)
                     continue;
 
-                sb.AppendLine(t.Name + t.GetProperty("HelpMessage").GetValue(null));
+                sb.Append("* ").AppendLine(("" + t.GetProperty("HelpMessage").GetValue(null)).Replace("\n", "\n  "));
             }
             return sb.ToString();
         }

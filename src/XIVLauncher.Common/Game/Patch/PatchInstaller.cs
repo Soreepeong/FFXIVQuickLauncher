@@ -49,6 +49,7 @@ namespace XIVLauncher.Common.Game.Patch
 
             var startInfo = new ProcessStartInfo(path);
             startInfo.UseShellExecute = true;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             //Start as admin if needed
             if (!EnvironmentSettings.IsNoRunas && Environment.OSVersion.Version.Major >= 6)
