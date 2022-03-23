@@ -44,6 +44,9 @@ namespace XIVLauncher.PatchInstaller
                 else if (IndexRpcTestCommand.Supports(args))
                     new IndexRpcTestCommand(args).Run();
 
+                else if (IndexExtractFileCommand.Supports(args))
+                    new IndexExtractFileCommand(args).Run();
+
                 else if (RpcCommand.Supports(args))
                     new RpcCommand(args).Run();
 

@@ -301,7 +301,11 @@ namespace XIVLauncher.Common.Patching.IndexedZiPatch
         {
             var file = Index[targetIndex];
             for (var i = 0; i < file.Count; ++i)
+            {
                 MissingPartIndicesPerTargetFile[targetIndex].Add(i);
+                if (file[i].IsFromSourceFile)
+                    MissingPartIndicesPerPatch[file[i].SourceIndex].Add(Tuple.Create(targetIndex, i));
+            }
         }
 
         public void SetTargetStreamForRead(int targetIndex, Stream targetStream)
