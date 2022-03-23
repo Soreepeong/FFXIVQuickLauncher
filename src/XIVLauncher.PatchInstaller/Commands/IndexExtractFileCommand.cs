@@ -72,6 +72,7 @@ namespace XIVLauncher.PatchInstaller.Commands
         {
             foreach (var indexFilePath in _indexFiles)
             {
+                Console.WriteLine($"Working on {indexFilePath.Name}...");
                 var indexFile = new IndexedZiPatchIndex(new BinaryReader(new DeflateStream(indexFilePath.OpenRead(), CompressionMode.Decompress)));
                 using var verifier = new IndexedZiPatchInstaller(indexFile);
 
@@ -87,7 +88,7 @@ namespace XIVLauncher.PatchInstaller.Commands
                         _targetDir.FullName,
                         Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(indexFilePath.Name)),
                         file.RelativePath);
-                    
+
                     Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
                     verifier.SetTargetStreamForWriteFromFile(i, new FileInfo(targetPath), true);
                 }
@@ -96,10 +97,12 @@ namespace XIVLauncher.PatchInstaller.Commands
                     verifier.QueueInstall(i, new FileInfo(Path.Combine(_sourceDir.FullName, indexFile.Sources[i])));
 
                 verifier.ProgressReportInterval = 1000;
-                verifier.OnInstallProgress += (int sourceIndex, long progress, long max, IndexedZiPatchInstaller.InstallTaskState state) => {
-                    Console.WriteLine($"Extracting from file {indexFile.Sources[sourceIndex]}... ({100.0 * progress / max:0.00}%)");
-                    };
+                verifier.OnInstallProgress += (int sourceIndex, long progress, long max, IndexedZiPatchInstaller.InstallTaskState state) =>
+                {
+                    Console.Write($"\rExtracting from file {indexFile.Sources[sourceIndex]}... ({100.0 * progress / max:0.00}%)");
+                };
                 verifier.Install(8).Wait();
+                Console.WriteLine();
             }
         }
     }
