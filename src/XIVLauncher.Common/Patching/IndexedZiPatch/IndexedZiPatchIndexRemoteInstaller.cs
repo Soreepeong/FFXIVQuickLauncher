@@ -29,12 +29,17 @@ namespace XIVLauncher.Common.Patching.IndexedZiPatch
 
             if (workerExecutablePath != null)
             {
-                this.workerProcess = new();
-                this.workerProcess.StartInfo.FileName = workerExecutablePath;
-                this.workerProcess.StartInfo.UseShellExecute = true;
-                this.workerProcess.StartInfo.Verb = asAdmin ? "runas" : "open";
-                this.workerProcess.StartInfo.Arguments = $"index-rpc {Process.GetCurrentProcess().Id} {rpcChannelName}";
-                this.workerProcess.Start();
+                this.workerProcess = Process.Start(new ProcessStartInfo()
+                {
+                    FileName = workerExecutablePath,
+                    Arguments = $"index-rpc {Process.GetCurrentProcess().Id} {rpcChannelName}",
+                    UseShellExecute = true,
+                    Verb = asAdmin ? "runas" : "open",
+#if !DEBUG
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+#endif
+                });
             }
             else
             {

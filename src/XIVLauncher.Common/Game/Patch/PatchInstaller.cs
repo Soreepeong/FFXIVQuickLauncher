@@ -50,8 +50,14 @@ namespace XIVLauncher.Common.Game.Patch
                 var path = Path.Combine(AppContext.BaseDirectory,
                     "XIVLauncher.PatchInstaller.exe");
 
-                var startInfo = new ProcessStartInfo(path);
-                startInfo.UseShellExecute = true;
+                var startInfo = new ProcessStartInfo(path)
+                {
+#if !DEBUG
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+#endif
+                    UseShellExecute = true,
+                };
 
                 //Start as admin if needed
                 if (!EnvironmentSettings.IsNoRunas && Environment.OSVersion.Version.Major >= 6)
