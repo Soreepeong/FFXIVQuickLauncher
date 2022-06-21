@@ -38,15 +38,16 @@ namespace XIVLauncher.Common.Patching.Util
                 switch (this.response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:
-                        {
-                            this.noMoreParts = true;
-                            var stream = new MultipartPartStream(this.response.Content.Headers.ContentLength.Value, 0, this.response.Content.Headers.ContentLength.Value);
-                            stream.AppendBaseStream(new ReadLengthLimitingStream(this.baseStream, this.response.Content.Headers.ContentLength.Value));
-                            return stream;
-                        }
+                    {
+                        this.noMoreParts = true;
+                        var stream = new MultipartPartStream(this.response.Content.Headers.ContentLength.Value, 0, this.response.Content.Headers.ContentLength.Value);
+                        stream.AppendBaseStream(new ReadLengthLimitingStream(this.baseStream, this.response.Content.Headers.ContentLength.Value));
+                        return stream;
+                    }
 
                     case System.Net.HttpStatusCode.PartialContent:
-                        if (this.response.Content.Headers.ContentType.MediaType.ToLowerInvariant() != "multipart/byteranges")
+                    {
+                        if (this.response.Content.Headers.ContentType?.MediaType?.ToLowerInvariant() != "multipart/byteranges")
                         {
                             this.noMoreParts = true;
                             var rangeHeader = this.response.Content.Headers.ContentRange;
@@ -62,11 +63,15 @@ namespace XIVLauncher.Common.Patching.Util
                             this.multipartBufferStream = new();
                             this.multipartHeaderLines = new();
                         }
+
                         break;
+                    }
 
                     default:
+                    {
                         this.response.EnsureSuccessStatusCode();
                         throw new EndOfStreamException($"Unhandled success status code {this.response.StatusCode}");
+                    }
                 }
             }
 

@@ -79,7 +79,15 @@ namespace XIVLauncher.PatchInstaller
                 {
                     try
                     {
-                        IndexedZiPatchOperations.RepairFromPatchFileIndexFromFile(args[1], args[2], args[3], 8).Wait();
+                        if (args[3].StartsWith("http://", StringComparison.InvariantCultureIgnoreCase)
+                            || args[3].StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            IndexedZiPatchOperations.RepairFromPatchFileIndexFromUri(args[1], args[2], args[3], 8).Wait();
+                        }
+                        else
+                        {
+                            IndexedZiPatchOperations.RepairFromPatchFileIndexFromFile(args[1], args[2], args[3], 8).Wait();
+                        }
                     }
                     catch (Exception ex)
                     {
